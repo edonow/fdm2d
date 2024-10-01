@@ -52,9 +52,9 @@ Where, $u(x, y, t)$: concentration at position $(x, y)$ at time $t$, $D$: diffus
 
 This program (`./wave_equation/fem2d.c`) solves the following two-dimensional wave equation:
 
-$\frac{\partial^2 u}{\partial t^2} = c^2 \left( \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)$
+$\frac{\partial^2 u}{\partial t^2}+\gamma\frac{\partial u}{\partial t} = c^2 \left( \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)$
 
-Where, $u(x, y, t)$: displacement at position $(x, y)$ at time $t$, $c$: wave propagation speed.
+Where, $u(x, y, t)$: displacement at position $(x, y)$ at time $t$, $\gamma$: attenuation coefficient, $c$: wave propagation speed.
 
 ## Program Description
 
@@ -77,5 +77,11 @@ Where, $u(x, y, t)$: displacement at position $(x, y)$ at time $t$, $c$: wave pr
       $u^{n+1}\_{i,j} = u^n\_{i,j} + \Delta t \cdot v^{n+1}\_{i,j}$
 
 ## Show result
+- $\gamma = 0.00$
 
 ![wave equation result](./wave_equation/wave.gif)
+
+- $\gamma = 0.09$
+
+![wave equation result](./wave_equation/wave_attenuation.gif)
+
