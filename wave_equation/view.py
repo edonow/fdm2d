@@ -28,4 +28,4 @@ def update(frame):
 
 ani = FuncAnimation(fig, update, frames=len(csv_files), interval=900)
 
-ani.save("wave.gif", writer="pillow", fps=10)
+ani.save("wave_attenuation.gif", writer="pillow", fps=10)
