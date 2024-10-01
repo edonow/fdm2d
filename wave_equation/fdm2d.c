@@ -3,7 +3,7 @@
 #include <math.h>
 
 void set_initialize(double *x, double *y, double *u, double *v, double *du, int nx, int ny, double width, double height);
-void update_wave(double *u, double *v, double *du, double c, double dt, double dx, double dy, int nx, int ny);
+void update_wave(double *u, double *v, double *du, double c, double dt, double dx, double dy, int nx, int ny, double gamma);
 
 int main() {
     int nx = 50;
@@ -14,6 +14,7 @@ int main() {
     double dy = height / (ny - 1);
     double c = 1.0;
     double dt = 0.1;
+    double gamma = 0.09;
     int time_steps = 1000;
 
     double *x = (double *)malloc(nx * ny * sizeof(double));
@@ -31,7 +32,7 @@ int main() {
     system("rm -rf ./output/*.csv");
 
     for (int t = 0; t <= time_steps; t++) {
-        update_wave(u, v, du, c, dt, dx, dy, nx, ny);
+        update_wave(u, v, du, c, dt, dx, dy, nx, ny, gamma);
 
         // -- output --
         if(t%50==0){
@@ -87,13 +88,14 @@ void set_initialize(double *x, double *y, double *u, double *v, double *du, int 
     }
 }
 // --------------------------------------------------------------
-void update_wave(double *u, double *v, double *du, double c, double dt, double dx, double dy, int nx, int ny) {
+void update_wave(double *u, double *v, double *du, double c, double dt, double dx, double dy, int nx, int ny, double gamma) {
     // -- update velocity --
     for (int i = 1; i < nx - 1; i++) {
         for (int j = 1; j < ny - 1; j++) {
             double dudx2 = (u[ny * (i + 1) + j] - 2 * u[ny * i + j] + u[ny * (i - 1) + j]) / (dx * dx);
             double dudy2 = (u[ny * i + (j + 1)] - 2 * u[ny * i + j] + u[ny * i + (j - 1)]) / (dy * dy);
-            v[ny * i + j] += dt * c * c * (dudx2 + dudy2); //update velocity
+            // v[ny * i + j] += dt * c * c * (dudx2 + dudy2); //update velocity
+            v[ny * i + j] += dt * (c * c * (dudx2 + dudy2) - gamma * v[ny * i + j]); //add attenuation term
             du[ny * i + j] = u[ny * i + j] + dt * v[ny * i + j]; //update displacement
         }
     }
